@@ -1,5 +1,5 @@
-ruby-logger-application (0.0.2-1) UNRELEASED; urgency=medium
+ruby-logger-application (0.0.2-1) unstable; urgency=medium
 
   * Initial release (Closes: #790373)
 
- -- Balasankar C <balasankarc@autistici.org>  Mon, 29 Jun 2015 16:37:17 +0530
+ -- Balasankar C <balasankarc@autistici.org>  Sun, 21 Jun 2015 16:22:02 +0530

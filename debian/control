@@ -6,11 +6,12 @@ Uploaders: Balasankar C <balasankarc@autistici.org>
 Build-Depends: debhelper (>= 7.0.50~),
                gem2deb,
                rake,
-               ruby-rspec
+               ruby-rspec,
+               ruby-test-unit
 Standards-Version: 3.9.6
 Vcs-Git: git://anonscm.debian.org/pkg-ruby-extras/ruby-logger-application.git
 Vcs-Browser: https://anonscm.debian.org/cgit/pkg-ruby-extras/ruby-logger-application.git
-Homepage:
+Homepage: https://github.com/ruby/logger-application
 Testsuite: autopkgtest-pkg-ruby
 XS-Ruby-Versions: all
 
@@ -20,5 +21,7 @@ XB-Ruby-Versions: ${ruby:Versions}
 Depends: ruby | ruby-interpreter,
          ${misc:Depends},
          ${shlibs:Depends}
-Description: Add logging support to your application.
- Add logging support to your application.
+Description: add logging support to Ruby application
+ This gem provides the ability to add logging support to a Ruby application. It
+ is extracted from Ruby's Logger, as Logger::Application was dropped in Ruby 
+ 2.2
