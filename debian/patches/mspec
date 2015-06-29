@@ -1,0 +1,67 @@
+Description: Disable tests requiring mspec
+ Disable tests requiring mspec as packaging of mspec is blocked by the 
+ reason it still uses RSpec 2.
+Author: Balasankar C <balasankarc@autistici.org>
+Last-Update: 2015-06-28
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/spec/log_spec.rb
++++ b/spec/log_spec.rb
+@@ -65,9 +65,9 @@
+     end
+   end
+ 
+-  it "sets the log device" do
+-    regex = /STDERR Message/
+-    @app.log = STDERR
+-    lambda { @app.log(Logger::WARN, "STDERR Message") }.should output_to_fd(regex, STDERR)
+-  end
++#  it "sets the log device" do
++    #regex = /STDERR Message/
++    #@app.log = STDERR
++    #lambda { @app.log(Logger::WARN, "STDERR Message") }.should output_to_fd(regex, STDERR)
++  #end
+ end
+--- a/spec/new_spec.rb
++++ b/spec/new_spec.rb
+@@ -31,9 +31,9 @@
+     LoggerSpecs::strip_date(third).should  == "INFO -- : End of . (status: true)\n"
+   end
+ 
+-  it "defaults logs to STDERR" do
+-    regex = /INFO.*WARN.*INFO.*/m
+-    lambda { LoggerSpecs::TestApp.new(nil, nil).start }.should output_to_fd(regex, STDERR)
+-    @log_file.rewind
+-  end
++#  it "defaults logs to STDERR" do
++    #regex = /INFO.*WARN.*INFO.*/m
++    #lambda { LoggerSpecs::TestApp.new(nil, nil).start }.should output_to_fd(regex, STDERR)
++    #@log_file.rewind
++  #end
+ end
+--- a/spec/set_log_spec.rb
++++ b/spec/set_log_spec.rb
+@@ -12,9 +12,9 @@
+     rm_r @file_path
+   end
+ 
+-  it "sets the log device for the logger" do
+-    regex = /STDERR Message/
+-    @app.set_log(STDERR)
+-    lambda { @app.log(Logger::WARN, "STDERR Message") }.should output_to_fd(regex, STDERR)
+-  end
++#  it "sets the log device for the logger" do
++    #regex = /STDERR Message/
++    #@app.set_log(STDERR)
++    #lambda { @app.log(Logger::WARN, "STDERR Message") }.should output_to_fd(regex, STDERR)
++  #end
+ end
+--- a/spec/spec_helper.rb
++++ b/spec/spec_helper.rb
+@@ -1,5 +1,5 @@
+ require 'logger/application'
+-require 'mspec/matchers/output_to_fd'
++#require 'mspec/matchers/output_to_fd'
+ require 'tempfile'
+ require 'fileutils'
+ 

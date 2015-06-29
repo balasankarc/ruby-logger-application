@@ -1,0 +1,121 @@
+Description: Update tests to support RSpec3
+ Make necessary changes to support RSpec 3
+Author: Balasankar C <balasankarc@autistici.org>
+Last-Update: 2015-06-28
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/spec/level_spec.rb
++++ b/spec/level_spec.rb
+@@ -20,8 +20,8 @@
+     @app.log(Logger::ERROR, "Show me")
+     @log_file.rewind
+     messages = @log_file.readlines
+-    messages.length.should == 1
+-    LoggerSpecs::strip_date(messages.first).should == "ERROR -- TestApp: Show me\n"
++    expect(messages.length).to eq(1)
++    expect(LoggerSpecs::strip_date(messages.first)).to eq("ERROR -- TestApp: Show me\n")
+   end
+ 
+   it "can set the threshold to unknown values" do
+@@ -33,6 +33,6 @@
+     @app.log(Logger::ERROR, "Error message")
+     @app.log(Logger::FATAL, "Fatal message")
+     @log_file.rewind
+-    @log_file.readlines.should be_empty
++    expect(@log_file.readlines).to be_empty
+   end
+ end
+--- a/spec/log_spec.rb
++++ b/spec/log_spec.rb
+@@ -17,7 +17,7 @@
+     @app.log(Logger::WARN, "Test message")
+     @log_file.rewind
+     message = @log_file.readlines.last
+-    LoggerSpecs::strip_date(message).should == "WARN -- TestApp: Test message\n"
++    expect(LoggerSpecs::strip_date(message)).to eq("WARN -- TestApp: Test message\n")
+   end
+ 
+   it "receives a severity" do
+@@ -29,24 +29,24 @@
+     @log_file.rewind
+     messages = @log_file.readlines[3..-1] # remove default messages
+ 
+-    LoggerSpecs::strip_date(messages[0]).should == "INFO -- TestApp: Info message\n"
+-    LoggerSpecs::strip_date(messages[1]).should == "DEBUG -- TestApp: Debug message\n"
+-    LoggerSpecs::strip_date(messages[2]).should == "WARN -- TestApp: Warn message\n"
+-    LoggerSpecs::strip_date(messages[3]).should == "ERROR -- TestApp: Error message\n"
+-    LoggerSpecs::strip_date(messages[4]).should == "FATAL -- TestApp: Fatal message\n"
++    expect(LoggerSpecs::strip_date(messages[0])).to eq("INFO -- TestApp: Info message\n")
++    expect(LoggerSpecs::strip_date(messages[1])).to eq("DEBUG -- TestApp: Debug message\n")
++    expect(LoggerSpecs::strip_date(messages[2])).to eq("WARN -- TestApp: Warn message\n")
++    expect(LoggerSpecs::strip_date(messages[3])).to eq("ERROR -- TestApp: Error message\n")
++    expect(LoggerSpecs::strip_date(messages[4])).to eq("FATAL -- TestApp: Fatal message\n")
+   end
+ 
+   it "uses app name for Application Name" do
+     @app.log(Logger::INFO,  "Info message")
+     @log_file.rewind
+     test_message = @log_file.readlines.last
+-    Regexp.new(/TestApp/).should =~ LoggerSpecs::strip_date(test_message)
++    expect(Regexp.new(/TestApp/)).to match(LoggerSpecs::strip_date(test_message))
+   end
+ 
+   it "receives a block and calls it if message is nil" do
+     temp = 0
+     @app.log(Logger::INFO, nil) { temp = 1 }
+-    temp.should == 1
++    expect(temp).to eq(1)
+   end
+ end
+ 
+--- a/spec/new_spec.rb
++++ b/spec/new_spec.rb
+@@ -16,9 +16,9 @@
+     @log_file.rewind            # go back to the beginning to read the contents
+ 
+     first, second, third = @log_file.readlines
+-    LoggerSpecs::strip_date(first).should  == "INFO -- TestApp: Start of TestApp.\n"
+-    LoggerSpecs::strip_date(second).should == "WARN -- TestApp: Test log message\n"
+-    LoggerSpecs::strip_date(third).should  == "INFO -- TestApp: End of TestApp. (status: true)\n"
++    expect(LoggerSpecs::strip_date(first)).to  eq("INFO -- TestApp: Start of TestApp.\n")
++    expect(LoggerSpecs::strip_date(second)).to eq("WARN -- TestApp: Test log message\n")
++    expect(LoggerSpecs::strip_date(third)).to  eq("INFO -- TestApp: End of TestApp. (status: true)\n")
+   end
+ 
+   it "defaults application name to ''" do
+@@ -26,9 +26,9 @@
+     @log_file.rewind
+ 
+     first, second, third =  @log_file.readlines
+-    LoggerSpecs::strip_date(first).should  == "INFO -- : Start of .\n"
+-    LoggerSpecs::strip_date(second).should == "WARN -- : Test log message\n"
+-    LoggerSpecs::strip_date(third).should  == "INFO -- : End of . (status: true)\n"
++    expect(LoggerSpecs::strip_date(first)).to  eq("INFO -- : Start of .\n")
++    expect(LoggerSpecs::strip_date(second)).to eq("WARN -- : Test log message\n")
++    expect(LoggerSpecs::strip_date(third)).to  eq("INFO -- : End of . (status: true)\n")
+   end
+ 
+ #  it "defaults logs to STDERR" do
+--- a/spec/start_spec.rb
++++ b/spec/start_spec.rb
+@@ -17,16 +17,16 @@
+     @app.start
+     @log_file.rewind
+     app_start, discard, app_end  = @log_file.readlines
+-    LoggerSpecs::strip_date(app_start).should == "INFO -- TestApp: Start of TestApp.\n"
+-    LoggerSpecs::strip_date(app_end).should   == "INFO -- TestApp: End of TestApp. (status: true)\n"
++    expect(LoggerSpecs::strip_date(app_start)).to eq("INFO -- TestApp: Start of TestApp.\n")
++    expect(LoggerSpecs::strip_date(app_end)).to   eq("INFO -- TestApp: End of TestApp. (status: true)\n")
+   end
+ 
+   it "returns the status code" do
+     code = @app.start
+     @log_file.rewind
+     app_end  = @log_file.readlines.last
+-    /true/.should =~ LoggerSpecs::strip_date(app_end)
+-    code.should == true
++    expect(/true/).to match(LoggerSpecs::strip_date(app_end))
++    expect(code).to eq(true)
+   end
+ 
+ end
